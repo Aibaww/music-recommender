@@ -46,7 +46,6 @@ CREATE TABLE songs
     jobid        int not null,
     songname     varchar(256) not null,
     songartist   varchar(256) not null,
-    songgenre    varchar(256) not null,
     PRIMARY KEY  (songid),
     FOREIGN KEY  (userid) REFERENCES users(userid),
     FOREIGN KEY  (jobid) REFERENCES jobs(jobid),
