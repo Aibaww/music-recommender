@@ -28,7 +28,9 @@ CREATE TABLE jobs
     status            varchar(256) not null,  -- uploaded, completed, error, processing...
     originaldatafile  varchar(256) not null,  -- original TXT filename from user
     datafilekey       varchar(256) not null,  -- TXT filename in S3 (bucketkey)
-    resultsfilekey    varchar(256) not null,  -- results filename in S3 bucket
+    emotion           varchar(256) default null,
+    valence           float not null default 0.0,  -- computed valence
+    energy            float not null default 0.0,  -- computed energy
     PRIMARY KEY (jobid),
     FOREIGN KEY (userid) REFERENCES users(userid),
     UNIQUE      (datafilekey)
@@ -54,6 +56,10 @@ INSERT INTO users(username, pwdhash)  -- pwd = abc456!!
 INSERT INTO users(username, pwdhash)  -- pwd = abc789!!
             values('l_chen', '$2y$10$GmIzRsGKP7bd9MqH.mErmuKvZQ013kPfkKbeUAHxar5bn1vu9.sdK');
 
+
+-- insert job for testing
+INSERT INTO jobs(userid, status, originaldatafile, datafilekey)
+            values(80001, 'uploaded', 'test01.txt', 'musicapp/test01.txt');
 
 --
 -- creating user accounts for database access:

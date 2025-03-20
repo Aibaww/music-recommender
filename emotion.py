@@ -2,23 +2,19 @@ import os
 from configparser import ConfigParser
 import requests
 
-def get_emotion_scores(text):
+def get_emotion_scores(text, api_key):
   """Get emotion scores using Hugging Face Inference API."""
-  # Get the API Key
-  config_file = 'musicapp-config.ini'
-  os.environ['AWS_SHARED_CREDENTIALS_FILE'] = config_file
-    
-  configur = ConfigParser()
-  HUGGING_FACE_API_KEY = configur.get("hf","HUGGING_FACE_API_KEY")
-
+  print("Getting emotion scores...")
   url = "https://api-inference.huggingface.co/models/j-hartmann/emotion-english-distilroberta-base"
   # Call inference API to classify text in Ekman's 6 basic emotions + neutral class
-  headers = {"Authorization": f"Bearer {HUGGING_FACE_API_KEY}"}
+  headers = {"Authorization": f"Bearer {api_key}"}
   response = requests.post(url, headers=headers, json={"inputs": text})
 
+  print("Received response from inference API")
   if response.status_code == 200:
     scores = response.json()[0]  # Get emotion predictions
-    return {item["label"]: item["score"] for item in scores}
+    print(scores)
+    return scores
   else:
     print("Error:", response.json())
     return None
@@ -36,8 +32,8 @@ def map_emotions_to_valence_energy(emotions):
   }
 
   # Translate all scores to valence & energy and get the sum
-  valence = sum(emotions.get(emotion, 0) * valence_mapping.get(emotion, 0.5) for emotion in emotions)
-  energy = sum(emotions.get(emotion, 0) * energy_mapping.get(emotion, 0.5) for emotion in emotions)
+  valence = sum(emotion['score'] * valence_mapping.get(emotion['label'], 0.5) for emotion in emotions)
+  energy = sum(emotion['score'] * energy_mapping.get(emotion['label'], 0.5) for emotion in emotions)
   print("Valence: ", valence)
   print("Energy: ", energy)
     
