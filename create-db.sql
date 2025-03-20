@@ -6,6 +6,7 @@ USE musicapp;
 
 DROP TABLE IF EXISTS jobs;
 DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS songs;
 
 
 CREATE TABLE users
@@ -36,8 +37,21 @@ CREATE TABLE jobs
     UNIQUE      (datafilekey)
 );
 
-
 ALTER TABLE jobs AUTO_INCREMENT = 1001;  -- starting value
+
+CREATE TABLE songs
+(
+    songid       int not null AUTO_INCREMENT,
+    userid       int not null,
+    jobid        int not null,
+    songname     varchar(256) not null,
+    songartist   varchar(256) not null,
+    songgenre    varchar(256) not null,
+    PRIMARY KEY  (songid),
+    FOREIGN KEY  (userid) REFERENCES users(userid),
+    FOREIGN KEY  (jobid) REFERENCES jobs(jobid),
+    UNIQUE       (songname)
+);
 
 
 --
