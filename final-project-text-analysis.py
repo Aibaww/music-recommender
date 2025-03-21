@@ -98,9 +98,6 @@ def lambda_handler(event, context):
     # call huggingface inference API to get emotion scores
     #
     emotion_scores = emotion.get_emotion_scores(input_text, hf_api_key)
-    # 
-    predicted_emotion = max(emotion_scores, key=lambda x: x['score'])['label']
-    print("Predicted emotion: ", predicted_emotion)
     
     #
     # convert emotion scores to valence energy scores
@@ -115,8 +112,8 @@ def lambda_handler(event, context):
     # the status of this job, and store the results
     #
     print("**Updating DB with result**")
-    sql = "Update jobs Set status = %s, emotion = %s, valence = %s, energy = %s Where datafilekey = %s"
-    datatier.perform_action(dbConn, sql, ["completed", predicted_emotion, str(valence), str(energy), bucketkey])
+    sql = "Update jobs Set status = %s, valence = %s, energy = %s Where datafilekey = %s"
+    datatier.perform_action(dbConn, sql, ["completed", str(valence), str(energy), bucketkey])
     print("**DONE, returning success**")
     
     return {

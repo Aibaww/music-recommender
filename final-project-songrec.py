@@ -99,8 +99,8 @@ def lambda_handler(event, context):
     
     userid = row[1]
     status = row[2]
-    valence = row[6]
-    energy = row[7]
+    valence = row[5]
+    energy = row[6]
     
     print("")
     print("job status:", status)

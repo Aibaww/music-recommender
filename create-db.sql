@@ -29,7 +29,6 @@ CREATE TABLE jobs
     status            varchar(256) not null,  -- uploaded, completed, error, processing...
     originaldatafile  varchar(256) not null,  -- original TXT filename from user
     datafilekey       varchar(256) not null,  -- TXT filename in S3 (bucketkey)
-    emotion           varchar(256) default null,
     valence           float not null default 0.0,  -- computed valence
     energy            float not null default 0.0,  -- computed energy
     PRIMARY KEY (jobid),
