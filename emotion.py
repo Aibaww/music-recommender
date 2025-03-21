@@ -36,3 +36,39 @@ def map_emotions_to_valence_energy(emotions):
   print("Energy: ", energy)
     
   return round(valence, 2), round(energy, 2)
+
+def map_colors_to_valence_energy(colors):
+  color_mapping = {
+    "green": {"valence": 0.8, "energy": 0.5},
+    "pink": {"valence": 0.9, "energy": 0.6},
+    "black": {"valence": 0.2, "energy": 0.3},
+    "red": {"valence": 0.7, "energy": 0.9},
+    "yellow": {"valence": 1.0, "energy": 0.8},
+    "cyan": {"valence": 0.8, "energy": 0.7},
+    "brown": {"valence": 0.4, "energy": 0.3},
+    "orange": {"valence": 0.9, "energy": 0.8},
+    "white": {"valence": 0.9, "energy": 0.4},
+    "purple": {"valence": 0.6, "energy": 0.5},
+    "blue": {"valence": 0.7, "energy": 0.4},
+    "grey": {"valence": 0.3, "energy": 0.2},
+  }
+
+  print("Calculating valence and energy...")
+
+  valence_sum = 0
+  energy_sum = 0
+  cnt = 0
+
+  for color in colors:
+    tag = color["SimplifiedColor"]
+    scores = color_mapping.get(tag)
+    valence_sum += scores["valence"]
+    energy_sum += scores["energy"]
+    cnt += 1
+
+  valence = valence_sum / cnt
+  energy = energy_sum / cnt
+
+  print("Valence: ", valence)
+  print("Energy: ", energy)
+  return (valence, energy)
