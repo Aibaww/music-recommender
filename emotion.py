@@ -1,5 +1,3 @@
-import os
-from configparser import ConfigParser
 import requests
 
 def get_emotion_scores(text, api_key):

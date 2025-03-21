@@ -154,29 +154,45 @@ def lambda_handler(event, context):
     # completed, get spotify token
     #
     print("**Getting Spotify token...**")
-    url = "https://accounts.spotify.com/api/token"
-    headers = {"Content-Type": "application/x-www-form-urlencoded"}
-    data = {"grant_type": "client_credentials",
-            "client_id": spotify_id,
-            "client_secret": spotify_secret}
-    response = requests.post(url, headers, data)
+    AUTH_URL = 'https://accounts.spotify.com/api/token'
+
+    # POST
+    auth_response = requests.post(AUTH_URL, {
+      'grant_type': 'client_credentials',
+      'client_id': spotify_id,
+      'client_secret': spotify_secret,
+    })
+
+    # convert the response to JSON
+    auth_response_data = auth_response.json()
+
+    # save the access token
+    token = auth_response_data['access_token']
+    # work-around
+    # token = configur.get("spotify", "access_token")
 
     #
     # check if token is generated successfully
     #
-    token = ""
-    if response.status_code != 200:
-      print("**Token request failed...**")
-      return
-    else:
-      body = response.json()
-      token = body["access_token"]
-      print("Token: ", token)
+    #if response.status_code != 200:
+    #  print("**Token request failed...**")
+    #  return
+    #else:
+    #  body = response.json()
+    #  token = body["access_token"]
+    #  print("Token: ", token)
 
     #
     # Call Spotify API
     #
+    print("**Calling Spotify API...**")
     songs = spotify.get_song_recommendations(valence, energy, genre, token)
+    
+    if songs == []:
+        return {
+            'statusCode': 500,
+            'body': "failed to get songs"
+        }
     print("Songs: ", songs)
 
     print("**Adding songs to database...**")
