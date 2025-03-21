@@ -50,7 +50,7 @@ def map_colors_to_valence_energy(colors):
     "white": {"valence": 0.9, "energy": 0.4},
     "purple": {"valence": 0.6, "energy": 0.5},
     "blue": {"valence": 0.7, "energy": 0.4},
-    "grey": {"valence": 0.3, "energy": 0.2},
+    "grey": {"valence": 0.5, "energy": 0.5}, # treat as neutral color since it's common
   }
 
   print("Calculating valence and energy...")

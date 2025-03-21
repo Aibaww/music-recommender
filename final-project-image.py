@@ -47,9 +47,6 @@ def lambda_handler(event, context):
     rds_pwd = configur.get('rds', 'user_pwd')
     rds_dbname = configur.get('rds', 'db_name')
 
-    # configure for hugging face access:
-    hf_api_key = configur.get('hf', 'api_key')
-
     #
     # this function is event-driven by a JPG being
     # dropped into S3. The bucket key is sent to 
@@ -61,8 +58,8 @@ def lambda_handler(event, context):
       
     extension = pathlib.Path(bucketkey).suffix
     
-    if extension != ".jpg" : 
-      raise Exception("expecting S3 document to have .jpg extension")
+    if extension not in [".jpg", ".jpeg"]: 
+      raise Exception("expecting S3 document to have .jpg or .jpeg extension")
     
     #
     # update status column in DB for this job
@@ -77,20 +74,27 @@ def lambda_handler(event, context):
     #
     # call huggingface inference API to get emotion scores
     #
+    print("**Calling Rekognition API**")
     region_name = configur.get('s3', 'region_name')
     rekognition = boto3.client('rekognition', region_name=region_name)
     response = rekognition.detect_labels(
+          Features=['IMAGE_PROPERTIES'],
           Image={
             'S3Object': {
               'Bucket': bucket.name,
               'Name': bucketkey,
             },
           },
-          MaxLabels=10,
-          MinConfidence=80,)
-    
+          Settings={
+            'ImageProperties': {
+                'MaxDominantColors': 5
+            }
+          })
+    print(response)
+    print("**Received response, analyzing colors...**")
     colors = response["ImageProperties"]["DominantColors"]
     (valence, energy) = emotion.map_colors_to_valence_energy(colors)
+
     #
     # analysis complete, update the database to change
     # the status of this job, and store the results
