@@ -71,6 +71,10 @@ def lambda_handler(event, context):
     #  1. filename of their file
     #  2. raw file data in base64 encoded string
     #
+    # The parameters are coming through web server 
+    # (or API Gateway) in the body of the request
+    # in JSON format.
+    #
     print("**Accessing request body**")
     
     if "body" not in event:

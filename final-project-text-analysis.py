@@ -84,6 +84,7 @@ def lambda_handler(event, context):
     with open(local_txt, 'r') as f:
       input_text = f.read()
     
+    print(input_text)
     #
     # update status column in DB for this job
     #
@@ -122,7 +123,7 @@ def lambda_handler(event, context):
     }
   
   #
-  # on an error, try to upload error message to S3:
+  # on an error, try to upload error message to database:
   #
   except Exception as err:
     print("**ERROR**")

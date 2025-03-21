@@ -70,11 +70,11 @@ INSERT INTO users(username, pwdhash)  -- pwd = abc789!!
 
 
 -- insert job for testing
-INSERT INTO jobs(userid, status, originaldatafile, datafilekey)
-            values(80001, 'uploaded', 'test01.txt', 'musicapp/test01.txt');
+#INSERT INTO jobs(userid, status, originaldatafile, datafilekey)
+#            values(80001, 'uploaded', 'test01.txt', 'musicapp/test01.txt');
 
-INSERT INTO jobs(userid, status, originaldatafile, datafilekey)
-            values(80002, 'uploaded', 'beach.jpg', 'musicapp/beach.jpg');
+#INSERT INTO jobs(userid, status, originaldatafile, datafilekey)
+#            values(80002, 'uploaded', 'beach.jpg', 'musicapp/beach.jpg');
             
 --
 -- creating user accounts for database access:

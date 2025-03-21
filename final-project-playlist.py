@@ -1,6 +1,6 @@
 #
-# Retrieves and returns a randomized playlist
-# of custom length for a player
+# Retrieves and returns all the jobs in the 
+# BenfordApp database.
 #
 
 import json
@@ -68,10 +68,9 @@ def lambda_handler(event, context):
     #
     length = 10
     if "length" in event:
-      length = event["length"]
-    elif "pathParameters" in event:
-      if "length" in event["pathParameters"]:
-        length = event["pathParameters"]["length"]
+      length = int(event["length"])
+    elif event.get("queryStringParameters"):  # Ensures it's not None
+      length = event["queryStringParameters"].get("length")  # Get length safely
     print("length: ", length)
 
     sql = "SELECT * FROM users WHERE userid = %s"
@@ -102,12 +101,11 @@ def lambda_handler(event, context):
     print("**Randomizing songs**")
     rows = list(rows)
     random.shuffle(rows)
-    if length > len(rows):
+    if length < len(rows):
       rows = rows[:length]
-    playlist = [{"songname": row[3], "songartist": row[4]} for row in rows]
 
-    for song in playlist:
-      print(song)
+    for row in rows:
+      print("Song name: " + row[3] + " | Song artist: " + row[4])
 
     #
     # respond in an HTTP-like way, i.e. with a status
@@ -117,7 +115,7 @@ def lambda_handler(event, context):
     
     return {
       'statusCode': 200,
-      'body': json.dumps(playlist)
+      'body': json.dumps(rows)
     }
     
   except Exception as err:
