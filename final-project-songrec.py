@@ -133,7 +133,7 @@ def lambda_handler(event, context):
     if status == "error":
       print("**Job errored, cannot recommend songs, returning...**")
       return {
-        'statusCode': 481,
+        'statusCode': 482,
         'body': json.dumps(status)
       }
     
